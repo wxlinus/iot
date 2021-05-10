@@ -2,11 +2,6 @@
 server:
   tomcat:
     uri-encoding: UTF-8
-  #  port: 8089
-  #  ssl:
-  #    key-store: classpath:tzkjg.jks
-  #    key-store-password: 574l9gm2ta
-  #    key-store-type: JKS
   servlet:
     context-path: /
 spring:

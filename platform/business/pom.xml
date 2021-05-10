@@ -12,9 +12,9 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>business</name>
-    <description>Demo project for Spring Boot</description>
+    <description>业务层</description>
     <properties>
-        <java.version>16</java.version>
+        <java.version>11</java.version>
         <quartz.version>2.3.0</quartz.version>
         <shiro.version>1.4.0</shiro.version>
         <kaptcha.version>0.0.9</kaptcha.version>
@@ -39,14 +39,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.13</version>
-            <scope>compile</scope>
-        </dependency>
-
         <dependency>
             <groupId>io.iot</groupId>
             <artifactId>common</artifactId>

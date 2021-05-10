@@ -14,7 +14,7 @@
     <name>home</name>
     <description>管理后台</description>
     <properties>
-        <java.version>16</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>

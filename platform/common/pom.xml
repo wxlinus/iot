@@ -10,10 +10,11 @@
     <groupId>io.iot</groupId>
     <artifactId>common</artifactId>
     <version>1.0.0</version>
+    <packaging>jar</packaging>
     <name>common</name>
-    <description>Demo project for Spring Boot</description>
+    <description>通用工具类</description>
     <properties>
-        <java.version>16</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
