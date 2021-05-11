@@ -1,13 +1,13 @@
-package io.iot.home;
+package io.iot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HomeApplication {
+public class ApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HomeApplication.class, args);
+        SpringApplication.run(ApiApplication.class, args);
     }
 
 }
