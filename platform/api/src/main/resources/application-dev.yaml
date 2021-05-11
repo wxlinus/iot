@@ -1,5 +1,5 @@
 server:
-  port: 8181
+  port: 9091
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -39,4 +39,10 @@ spring:
 project:
   swagger:
     show: true #开启接口文档
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    dao: debug
+    org:
+      mybatis: debug
 

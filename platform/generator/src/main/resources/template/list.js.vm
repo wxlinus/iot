@@ -1,0 +1,186 @@
+$(function () {
+    $("#jqGrid").jqGrid({
+        url: baseURL + '${moduleName}/${pathName}/list',
+        datatype: "json",
+        colModel: [			
+#foreach($column in $columns)
+#if($column.columnName == $pk.columnName)
+			{ label: '${column.attrname}', name: '${column.attrname}', index: '${column.columnName}', width: 50, key: true ,hidden:true},
+#else
+			{ label: '${column.comments}', name: '${column.attrname}', index: '${column.columnName}', width: 80 }#if($velocityCount != $columns.size()), #end
+			
+#end			
+#end
+        ],
+        sortable: true,
+        sortname: 'id',
+        sortorder: 'desc',
+		viewrecords: true,
+        height: 'auto',
+        rowNum: 10,
+		rowList : [10,30,50],
+        rownumbers: true, 
+        rownumWidth: 45, 
+        autowidth:true,
+        multiselect: true,
+        pager: "#jqGridPager",
+        jsonReader : {
+            root: "page.list",
+            page: "page.currPage",
+            total: "page.totalPage",
+            records: "page.totalCount"
+        },
+        prmNames : {
+            page:"page", 
+            rows:"limit", 
+            order: "order"
+        },
+        gridComplete:function(){
+        	//隐藏grid底部滚动条
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        }
+    });
+    formValidator();
+});
+
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		showList: true,
+		title: null,
+		${classname}: {}
+	},
+	methods: {
+		query: function () {
+			vm.reload();
+		},
+		add: function(){
+			$("form").data('bootstrapValidator').destroy();//验证销毁重构
+			$('form').data('bootstrapValidator', null);
+			formValidator();
+			vm.${classname} = {};
+			var layerAdd = layer.open({
+        		type: 1, 
+        		title:"新增",
+        		area: ['50%', '80%'],
+        		content: $("#layout-div")
+        	}); 
+		},
+		update: function (event) {
+			var $pk.attrname = getSelectedRow();
+			if($pk.attrname == null){
+				return ;
+			}
+            
+            $("form").data('bootstrapValidator').destroy();//验证销毁重构
+			$('form').data('bootstrapValidator', null);
+			formValidator();
+            vm.getInfo(${pk.attrname});
+            var layerUpdate = layer.open({
+        		type: 1, 
+        		title:"修改",
+        		area: ['50%', '80%'],
+        		content: $("#layout-div")
+        	});
+		},
+		saveOrUpdate: function (event) {
+			//验证表单start
+			$("form").data("bootstrapValidator").resetForm();//重置表单所有验证规则，下一步再触发验证
+			$("form").data("bootstrapValidator").validate();//手动触发全部验证
+	        var flag = $("form").data("bootstrapValidator").isValid();//获取当前表单验证状态
+	        if (!flag) {//验证不通过
+		    　　 	return;
+		    　　 }
+		
+		    $('#btnSaveOrUpdate').button('loading').delay(1000).queue(function() {
+                var url = vm.${classname}.${pk.attrname} == null ? "${moduleName}/${pathName}/save" : "${moduleName}/${pathName}/update";
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + url,
+                    contentType: "application/json",
+                    data: JSON.stringify(vm.${classname}),
+                    success: function(r){
+                        if(r.code === 0){
+                             layer.msg("操作成功", {icon: 1});
+                             vm.reload();
+                             $('#btnSaveOrUpdate').button('reset');
+                             $('#btnSaveOrUpdate').dequeue();
+                        }else{
+                            layer.alert(r.msg);
+                            $('#btnSaveOrUpdate').button('reset');
+                            $('#btnSaveOrUpdate').dequeue();
+                        }
+                    }
+                });
+			});
+		},
+		del: function (event) {
+			var ${pk.attrname}s = getSelectedRows();
+			if(${pk.attrname}s == null){
+				return ;
+			}
+			var lock = false;
+            layer.confirm('确定要删除选中的记录？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+               if(!lock) {
+                    lock = true;
+		            $.ajax({
+                        type: "POST",
+                        url: baseURL + "${moduleName}/${pathName}/delete",
+                        contentType: "application/json",
+                        data: JSON.stringify(${pk.attrname}s),
+                        success: function(r){
+                            if(r.code == 0){
+                                layer.msg("操作成功", {icon: 1});
+                                $("#jqGrid").trigger("reloadGrid");
+                            }else{
+                                layer.alert(r.msg);
+                            }
+                        }
+				    });
+			    }
+             }, function(){
+             });
+		},
+		getInfo: function(${pk.attrname}){
+			$.get(baseURL + "${moduleName}/${pathName}/info/"+${pk.attrname}, function(r){
+                vm.${classname} = r.${classname};
+            });
+		},
+		reload: function (event) {
+			vm.showList = true;
+			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			$("#jqGrid").jqGrid('setGridParam',{ 
+                page:page
+            }).trigger("reloadGrid");
+            layer.closeAll();
+		}
+	}
+});
+
+
+function formValidator(){
+	$('form').bootstrapValidator({
+		message: 'This value is not valid',
+//		live: 'disabled',
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			name: {
+				validators: {
+					notEmpty: {
+						message: '不能为空'
+					},stringLength: {
+						min: 1,
+						max: 50,
+                    message: '长度不能超过50个字符'
+					}
+				}
+			}
+		}
+	});
+}

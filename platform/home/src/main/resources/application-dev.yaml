@@ -1,6 +1,7 @@
 server:
-  port: 8089
+  port: 9090
 spring:
+  #数据库配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -16,7 +17,6 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
       time-between-eviction-runs-millis: 60000
       min-evictable-idle-time-millis: 300000
-
       #validation-query: SELECT 1 FROM DUAL
       test-while-idle: true
       test-on-borrow: false
@@ -34,9 +34,15 @@ spring:
         wall:
           config:
             multi-statement-allow: true
-
-  #项目配置
+#项目配置
 project:
   swagger:
     show: true #开启接口文档
+#日志配置
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    dao: debug
+    org:
+      mybatis: debug
 
