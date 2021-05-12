@@ -1,7 +1,5 @@
-package io.iot.modules.user.service.impl;
+package io.iot.modules.sysuser.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -10,9 +8,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.iot.common.utils.PageUtils;
 import io.iot.common.utils.Query;
 
-import io.iot.modules.user.dao.UserDao;
-import io.iot.modules.user.entity.UserEntity;
-import io.iot.modules.user.service.UserService;
+import io.iot.modules.sysuser.dao.UserDao;
+import io.iot.modules.sysuser.entity.UserEntity;
+import io.iot.modules.sysuser.service.UserService;
 
 
 @Service("userService")
@@ -27,8 +25,5 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
 
         return new PageUtils(page);
     }
-
-
-
 
 }

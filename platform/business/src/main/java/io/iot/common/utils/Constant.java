@@ -49,4 +49,11 @@ public class Constant {
      * 开
      */
     public static final int open = 1;
+
+    /**
+     * 超级管理员
+     */
+    public static final Long SUPER_ADMIN = 1L;
+
+
 }

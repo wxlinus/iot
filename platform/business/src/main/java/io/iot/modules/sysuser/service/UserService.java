@@ -1,22 +1,20 @@
-package io.iot.modules.user.service;
+package io.iot.modules.sysuser.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.iot.common.utils.PageUtils;
-import io.iot.modules.user.entity.UserEntity;
+import io.iot.modules.sysuser.entity.UserEntity;
 
 import java.util.Map;
 
 /**
- * 用户信息表
+ * 系统用户
  *
  * @author weixiang
- * @email ${email}
- * @date 2021-05-11 15:09:48
+ * @email test@gmail.com
+ * @date 2021-05-12 14:49:44
  */
 public interface UserService extends IService<UserEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
-
 }
 
