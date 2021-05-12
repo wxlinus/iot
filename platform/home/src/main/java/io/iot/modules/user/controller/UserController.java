@@ -20,7 +20,6 @@ import io.iot.common.utils.PageUtils;
 import io.iot.common.utils.R;
 
 
-
 /**
  * 用户信息表
  *
@@ -40,8 +39,7 @@ public class UserController {
      */
     @ApiOperation(value = "获取用户信息", httpMethod = "GET")
     @RequestMapping("/list")
-    @RequiresPermissions("user:user:list")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = userService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -52,8 +50,7 @@ public class UserController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("user:user:info")
-    public R info(@PathVariable("id") Long id){
+    public R info(@PathVariable("id") Long id) {
         UserEntity user = userService.getById(id);
 
         return R.ok().put("user", user);
@@ -63,8 +60,7 @@ public class UserController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("user:user:save")
-    public R save(@RequestBody UserEntity user){
+    public R save(@RequestBody UserEntity user) {
         userService.save(user);
 
         return R.ok();
@@ -74,11 +70,10 @@ public class UserController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("user:user:update")
-    public R update(@RequestBody UserEntity user){
+    public R update(@RequestBody UserEntity user) {
         ValidatorUtils.validateEntity(user);
         userService.updateById(user);
-        
+
         return R.ok();
     }
 
@@ -86,10 +81,8 @@ public class UserController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("user:user:delete")
-    public R delete(@RequestBody Long[] ids){
+    public R delete(@RequestBody Long[] ids) {
         userService.removeByIds(Arrays.asList(ids));
-
         return R.ok();
     }
 
