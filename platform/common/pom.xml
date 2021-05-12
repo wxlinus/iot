@@ -36,6 +36,12 @@
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.6.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

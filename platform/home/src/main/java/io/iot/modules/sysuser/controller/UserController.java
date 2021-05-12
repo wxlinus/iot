@@ -115,4 +115,21 @@ public class UserController {
         return R.error("权限错误！").put("role",role);
     }
 
+    @RequestMapping(value = "/notLogin")
+    public  R notLogin() {
+        return R.error("您尚未登陆！");
+    }
+
+    @RequestMapping(value = "/notRole")
+    public R notRole() {
+        return R.error("您没有权限！");
+    }
+
+    @RequestMapping(value = "/logout")
+    public R logout() {
+        Subject subject = SecurityUtils.getSubject();
+        //注销
+        subject.logout();
+        return R.ok("成功注销！");
+    }
 }
