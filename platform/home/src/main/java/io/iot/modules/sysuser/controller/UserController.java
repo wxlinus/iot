@@ -4,7 +4,11 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.iot.common.validator.ValidatorUtils;
+import io.iot.modules.sysuser.dao.UserDao;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +35,8 @@ import io.iot.common.utils.R;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 列表
@@ -82,6 +88,31 @@ public class UserController {
         userService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    /**
+     * 登陆
+     *
+     * @param username 用户名
+     * @param password 密码
+     */
+    @RequestMapping(value = "/login")
+    public R login(String username, String password) {
+        // 从SecurityUtils里边创建一个 subject
+        Subject subject = SecurityUtils.getSubject();
+        // 在认证提交前准备 token（令牌）
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        // 执行认证登陆
+        subject.login(token);
+        //根据权限，指定返回数据
+        String role = userDao.getRole(username);
+        if ("用户".equals(role)) {
+            return R.ok("欢迎登陆");
+        }
+        if ("管理员".equals(role)) {
+            return R.ok("欢迎来到管理员页面");
+        }
+        return R.error("权限错误！").put("role",role);
     }
 
 }
