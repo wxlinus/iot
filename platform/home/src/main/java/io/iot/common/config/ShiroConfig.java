@@ -28,9 +28,9 @@ public class ShiroConfig {
         //游客，开发权限
         filterChainDefinitionMap.put("/guest/**", "anon");
         //用户，需要角色权限 “user”
-        filterChainDefinitionMap.put("/user/**", "roles[user]");
+        filterChainDefinitionMap.put("/user/**", "roles[用户]");
         //管理员，需要角色权限 “admin”
-        filterChainDefinitionMap.put("/admin/**", "roles[admin]");
+        filterChainDefinitionMap.put("/admin/**", "roles[管理员]");
         //开放登陆接口
         filterChainDefinitionMap.put("/sysuser/user/login", "anon");
         //其余接口一律拦截

@@ -1,7 +1,14 @@
 package io.iot.modules.sysuser.shiro;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.additional.query.impl.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.service.additional.query.impl.QueryChainWrapper;
 import io.iot.modules.sysuser.dao.UserDao;
+import io.iot.modules.sysuser.entity.RoleEntity;
+import io.iot.modules.sysuser.entity.UserEntity;
+import io.iot.modules.sysuser.service.RoleService;
+import io.iot.modules.sysuser.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -14,9 +21,11 @@ import java.util.*;
 
 public class UserRealm extends AuthorizingRealm {
 
-
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+
     /**
      * 获取身份验证信息
      * Shiro中，最终是通过 Realm 来获取应用程序中的用户、角色及权限信息的。
@@ -29,7 +38,10 @@ public class UserRealm extends AuthorizingRealm {
         System.out.println("————身份认证方法————");
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         // 从数据库获取对应用户名密码的用户
-        String password = userDao.getPassword(token.getUsername());
+//        String password = userDao.getPassword(token.getUsername());
+        String password = userService.getOne(new LambdaQueryWrapper<UserEntity>()
+                .eq(UserEntity::getUsername, token.getUsername()))
+                .getPassword();
         if (null == password) {
             throw new AccountException("用户名不正确");
         } else if (!password.equals(new String((char[]) token.getCredentials()))) {
@@ -50,7 +62,11 @@ public class UserRealm extends AuthorizingRealm {
         String username = (String) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         //获得该用户角色
-        String role = userDao.getRole(username);
+//        String role = userDao.getRole(username);
+        String roleId=userService.getOne(new LambdaQueryWrapper<UserEntity>()
+                .eq(UserEntity::getUsername, username))
+                .getRoleId();
+        String role = roleService.getOne(new LambdaQueryWrapper<RoleEntity>().eq(RoleEntity::getId,roleId)).getRole();
         Set<String> set = new HashSet<>();
         //需要将 role 封装到 Set 作为 info.setRoles() 的参数
         set.add(role);

@@ -76,7 +76,7 @@ public class UserController {
     public R update(@RequestBody UserEntity user){
         ValidatorUtils.validateEntity(user);
         userService.updateById(user);
-        
+
         return R.ok();
     }
 
@@ -106,6 +106,7 @@ public class UserController {
         subject.login(token);
         //根据权限，指定返回数据
         String role = userDao.getRole(username);
+        System.out.println(role);
         if ("用户".equals(role)) {
             return R.ok("欢迎登陆");
         }

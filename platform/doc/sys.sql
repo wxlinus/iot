@@ -58,8 +58,8 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', 'admin', NULL, '管理员', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '0');
-INSERT INTO `sys_user` VALUES (2, 'user', '123456', NULL, '用户1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '1');
+INSERT INTO `sys_user` VALUES (1, 'admin', 'admin', NULL, '管理员', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '1');
+INSERT INTO `sys_user` VALUES (2, 'user', '123456', NULL, '用户1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2');
 
 -- ----------------------------
 -- Table structure for tk_user

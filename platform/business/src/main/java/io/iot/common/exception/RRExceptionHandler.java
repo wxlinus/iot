@@ -27,7 +27,6 @@ public class RRExceptionHandler {
 		R r = new R();
 		r.put("code", e.getCode());
 		r.put("msg", e.getMessage());
-
 		return r;
 	}
 
@@ -42,16 +41,16 @@ public class RRExceptionHandler {
 		logger.error(e.getMessage(), e);
 		return R.error(403,"没有权限，请联系管理员授权");
 	}
-
+	// 捕捉抛出的异常
+	@ExceptionHandler(AccountException.class)
+	public R handleShiroException(AccountException e) {
+		logger.error(e.getMessage(), e);
+		return R.error(e.getMessage());
+	}
 	@ExceptionHandler(Exception.class)
 	public R handleException(Exception e){
 		logger.error(e.getMessage(), e);
 		return R.error();
 	}
-	// 捕捉 CustomRealm 抛出的异常
-	@ExceptionHandler(AccountException.class)
-	public R handleShiroException(Exception e) {
-		logger.error(e.getMessage(), e);
-		return R.error(e.getMessage());
-	}
+
 }
