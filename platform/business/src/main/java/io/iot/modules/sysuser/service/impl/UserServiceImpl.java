@@ -26,4 +26,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         return new PageUtils(page);
     }
 
+    @Override
+    public String getRole(String userName) {
+        return baseMapper.getRole(userName);
+    }
+
 }

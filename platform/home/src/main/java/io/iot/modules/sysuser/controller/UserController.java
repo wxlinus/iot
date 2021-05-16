@@ -1,10 +1,14 @@
 package io.iot.modules.sysuser.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import io.iot.common.exception.RRException;
 import io.iot.common.validator.ValidatorUtils;
 import io.iot.modules.sysuser.dao.UserDao;
+import io.iot.modules.sysuser.entity.RoleEntity;
+import io.iot.modules.sysuser.service.RoleService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,8 +25,6 @@ import io.iot.modules.sysuser.service.UserService;
 import io.iot.common.utils.PageUtils;
 import io.iot.common.utils.R;
 
-
-
 /**
  * 系统用户
  *
@@ -36,7 +38,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private UserDao userDao;
+    private RoleService roleService;
 
     /**
      * 列表
@@ -105,27 +107,19 @@ public class UserController {
         // 执行认证登陆
         subject.login(token);
         //根据权限，指定返回数据
-        String role = userDao.getRole(username);
+        String role = userService.getRole(username);
         System.out.println(role);
-        if ("用户".equals(role)) {
-            return R.ok("欢迎登陆");
-        }
-        if ("管理员".equals(role)) {
-            return R.ok("欢迎来到管理员页面");
+        List<RoleEntity> roleEntityList=roleService.list();
+        if(roleEntityList==null) throw new RRException("权限数据为空");
+        for(RoleEntity roletemp:roleEntityList){
+            if(roletemp.getRole().equals(role))
+                return R.ok("欢迎登陆");
+            if (roletemp.getRole().equals(role)) {
+                return R.ok("欢迎来到管理员页面");
+            }
         }
         return R.error("权限错误！").put("role",role);
     }
-
-    @RequestMapping(value = "/notLogin")
-    public  R notLogin() {
-        return R.error("您尚未登陆！");
-    }
-
-    @RequestMapping(value = "/notRole")
-    public R notRole() {
-        return R.error("您没有权限！");
-    }
-
     @RequestMapping(value = "/logout")
     public R logout() {
         Subject subject = SecurityUtils.getSubject();
