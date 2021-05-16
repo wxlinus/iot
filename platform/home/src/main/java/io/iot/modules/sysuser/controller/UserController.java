@@ -113,10 +113,11 @@ public class UserController {
         if(roleEntityList==null) throw new RRException("权限数据为空");
         for(RoleEntity roletemp:roleEntityList){
             if(roletemp.getRole().equals(role))
-                return R.ok("欢迎登陆");
-            if (roletemp.getRole().equals(role)) {
-                return R.ok("欢迎来到管理员页面");
+            {
+                return R.ok("欢迎登陆").put("role",roletemp.getRole());
             }
+
+
         }
         return R.error("权限错误！").put("role",role);
     }

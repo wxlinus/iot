@@ -30,6 +30,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/svg/**", "anon");
         filterChainDefinitionMap.put("/img/**", "anon");
+        filterChainDefinitionMap.put("/images/**", "anon");
         //游客，开发权限
         filterChainDefinitionMap.put("/guest/**", "anon");
         //用户，需要角色权限 “user”
