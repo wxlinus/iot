@@ -5,6 +5,8 @@ import io.iot.modules.sysuser.shiro.UserRealm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +15,7 @@ import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -44,7 +47,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        System.out.println("Shiro拦截器工厂类注入成功");
+        logger.info("Shiro拦截器工厂类注入成功");
         return shiroFilterFactoryBean;
     }
 
@@ -62,8 +65,7 @@ public class ShiroConfig {
     /**
      * 自定义身份认证 realm;
      * <p>
-     * 必须写这个类，并加上 @Bean 注解，目的是注入 CustomRealm，
-     * 否则会影响 CustomRealm类 中其他类的依赖注入
+     * 必须写这个类，并加上 @Bean 注解，
      */
     @Bean
     public UserRealm userRealm() {

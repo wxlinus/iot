@@ -13,6 +13,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +41,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 列表
@@ -92,12 +96,13 @@ public class UserController {
         return R.ok();
     }
 
-    /**
-     * 登陆
-     *
-     * @param username 用户名
-     * @param password 密码
-     */
+  /**
+   * @author: weixang
+   * @date: 2021/5/17 15:46
+   * @description:登录方法
+   * @param: 用户名，密码
+   * @return: 返回登录结果
+   */
     @RequestMapping(value = "/login")
     public R login(String username, String password) {
         // 从SecurityUtils里边创建一个 subject
@@ -108,18 +113,24 @@ public class UserController {
         subject.login(token);
         //根据权限，指定返回数据
         String role = userService.getRole(username);
-        System.out.println(role);
         List<RoleEntity> roleEntityList=roleService.list();
-        if(roleEntityList==null) throw new RRException("权限数据为空");
+        if(roleEntityList==null) throw new RRException("权限数据库为空");
         for(RoleEntity roletemp:roleEntityList){
             if(roletemp.getRole().equals(role))
             {
-                return R.ok("欢迎登陆").put("role",roletemp.getRole());
+                return R.ok("登录成功").put("role",roletemp.getRole());
             }
-
         }
         return R.error("权限错误！").put("role",role);
     }
+
+    /**
+     * @author: weixiang
+     * @date: 2021/5/17 15:47
+     * @description:注销登录
+     * @param: 空
+     * @return: 注销结果
+     */
     @RequestMapping(value = "/logout")
     public R logout() {
         Subject subject = SecurityUtils.getSubject();

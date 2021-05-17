@@ -13,6 +13,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -24,6 +26,7 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     private RoleService roleService;
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 获取身份验证信息
      * Shiro中，最终是通过 Realm 来获取应用程序中的用户、角色及权限信息的。
@@ -33,8 +36,8 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        System.out.println("————身份认证方法————");
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+        logger.info("登录认证:host"+token);
         // 从数据库获取对应用户名密码的用户
 //        String password = userDao.getPassword(token.getUsername());
         String password = userService.getOne(new LambdaQueryWrapper<UserEntity>()
@@ -56,9 +59,10 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("————权限认证————");
+
         String username = (String) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        logger.info("权限认证:"+username);
         //获得该用户角色
 //        String role = userDao.getRole(username);
         String roleId = userService.getOne(new LambdaQueryWrapper<UserEntity>()
