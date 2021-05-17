@@ -2,9 +2,7 @@ package io.iot.modules.sysuser.shiro;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.additional.query.impl.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.additional.query.impl.QueryChainWrapper;
-import io.iot.modules.sysuser.dao.UserDao;
+import io.iot.common.utils.Constant;
 import io.iot.modules.sysuser.entity.RoleEntity;
 import io.iot.modules.sysuser.entity.UserEntity;
 import io.iot.modules.sysuser.service.RoleService;
@@ -63,15 +61,24 @@ public class UserRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         //获得该用户角色
 //        String role = userDao.getRole(username);
-        String roleId=userService.getOne(new LambdaQueryWrapper<UserEntity>()
+        String roleId = userService.getOne(new LambdaQueryWrapper<UserEntity>()
                 .eq(UserEntity::getUsername, username))
                 .getRoleId();
-        String role = roleService.getOne(new LambdaQueryWrapper<RoleEntity>().eq(RoleEntity::getId,roleId)).getRole();
         Set<String> set = new HashSet<>();
-        //需要将 role 封装到 Set 作为 info.setRoles() 的参数
-        set.add(role);
-        //设置该用户拥有的角色
-        info.setRoles(set);
+        //管理员获得全部角色
+        if (Constant.ADMIN.equals(roleId)) {
+            List<RoleEntity> roleEntityList = roleService.list();
+            for (RoleEntity roletemp : roleEntityList) {
+                set.add(roletemp.getRole());
+            }
+            info.setRoles(set);
+        } else {
+            String role = roleService.getOne(new LambdaQueryWrapper<RoleEntity>().eq(RoleEntity::getId, roleId)).getRole();
+            //需要将 role 封装到 Set 作为 info.setRoles() 的参数
+            set.add(role);
+            //设置该用户拥有的角色
+            info.setRoles(set);
+        }
         return info;
     }
 }

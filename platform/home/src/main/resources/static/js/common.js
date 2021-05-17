@@ -1,1 +1,1 @@
-var baseUrl='http://127.0.0.1:9090/'
+var baseUrl='http://localhost:9090/'

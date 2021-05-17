@@ -117,7 +117,6 @@ public class UserController {
                 return R.ok("欢迎登陆").put("role",roletemp.getRole());
             }
 
-
         }
         return R.error("权限错误！").put("role",role);
     }

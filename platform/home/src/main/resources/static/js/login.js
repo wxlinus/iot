@@ -9,13 +9,15 @@ $(function() {
             "password": $("#pass").val(),
          },
          async:true, // 异步请求
-         cache:false, // 设置为 false 将不缓存此页面
+         // cache:false, // 设置为 false 将不缓存此页面
          dataType: 'json', // 返回对象
          success: function(data) {
-            window.location.href='/index.html'
             console.log(data);
+            window.location.href=baseUrl+'index.html'
+
          },
          error: function(data) {
+
             // 请求失败函数
             console.log(data);
          }

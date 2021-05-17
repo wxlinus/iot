@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<title>500 Page</title>
 
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="/css/style.css">
 
 </head>
 
@@ -74,15 +74,15 @@
 					</div>
 				</div>
 
-				<p class="p404" data-depth="0.50">暂无权限</p>
-				<p class="p404" data-depth="0.10">暂无权限</p>
+				<p class="p404" data-depth="0.50">403</p>
+				<p class="p404" data-depth="0.10">403</p>
 
 			</div>
 
 			<div class="text">
 				<article>
-					<p>Uh oh! 看来你迷路了。<br>请点击按钮返回首页！</p>
-					<button>返回首页</button>
+					<p>Uh oh! 看来你暂时没有权限了。<br>请点击按钮返回首页！</p>
+					<button onclick="back()">返回首页</button>
 				</article>
 			</div>
 
@@ -90,9 +90,10 @@
 		</div>
 	</section>
 
-	<script src='js/parallax.min.js'></script>
-	<script src='js/jquery.min.js'></script>
-	<script src="js/script.js"></script>
+	<script src='/js/parallax.min.js'></script>
+	<script src='/js/jquery.min.js'></script>
+	<script src="/js/script.js"></script>
+	<script src="/js/common.js"></script>
 
 	<style>
 		.copyrights {
@@ -106,5 +107,9 @@
 	<div class="copyrights" id="links20210126">
 	</div>
 </body>
-
+<script>
+	function back(){
+		window.location.href=baseUrl+"index.html"
+	}
+</script>
 </html>

@@ -53,7 +53,7 @@ public class Constant {
     /**
      * 超级管理员
      */
-    public static final Long SUPER_ADMIN = 1L;
+    public static final String ADMIN = "0";
 
 
 }
